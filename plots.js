@@ -2,6 +2,7 @@
 
 console.log("plots.js loaded");
 
+
 function DrawBarchart(sampleId) {
     console.log(`DrawBarchart(${sampleId})`);
 
@@ -59,7 +60,7 @@ function DrawBubblechart(sampleId) {
         let otu_ids = result.otu_ids;
         let otu_labels = result.otu_labels;
         let sample_values = result.sample_values;
-        // let yticks = otu_ids.slice(0, 10).map(otuId => `OTU ${otuId}`).reverse();
+        
 
         
         let bubbleData = {
@@ -79,13 +80,13 @@ function DrawBubblechart(sampleId) {
 
         let bubbleArray = [bubbleData];
 
-        // let barLayout = {
-        //     title: "Top 10 Bacteria Cultures Found",
-        //     margin: { t: 30, l: 150 }
+        let bubbleLayout = {
+            title: "Bubble Chart Bacteria Cultures Found",
+            margin: { t: 30, l: 150 }
 
-        // }
+        }
 
-        Plotly.newPlot("bubble", bubbleArray);
+        Plotly.newPlot("bubble", bubbleArray, bubbleLayout);
                 
 
     });
@@ -95,7 +96,37 @@ function DrawBubblechart(sampleId) {
 
 function ShowMetadata(sampleId) {
     console.log(`ShowMetadata(${sampleId})`);
-}
+
+    d3.json("samples.json").then(data => {
+        
+
+        let samples = data.metadata;
+        let resultArray = samples.filter(s => s.id == sampleId);
+        let result = resultArray[0];
+
+        console.log("result", result);
+
+        metadatadiv = d3.select("#sample-metadata");
+
+        metadatadiv.html("");
+
+                       
+        Object.entries(result).forEach(function([key, value]) {
+            console.log("pairs", key, value);
+            metadatadiv.append("p").text(`${key}: ${value}`);
+
+
+        })
+
+
+        
+
+
+    });
+};
+       
+ 
+
 
 function optionChanged(id) {
     console.log(`optionChanged(${id})`);
